@@ -1,4 +1,4 @@
-=== Data Driven Tool - tracking Pixel ===
+=== Adsfox.com  UTM Builder Adsfox ===
 Contributors: Adsfox.com
 Donate link:
 Tags: UTM Builder, UTM Redirect, URL short
