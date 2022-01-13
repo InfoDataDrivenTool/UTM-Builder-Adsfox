@@ -1,5 +1,5 @@
 <?php
-if (!function_exists('ddt_recursive_esc_js')) {
+if (!function_exists('adfox_esc_js')) {
     function ddt_recursive_esc_js($array) {
 
         foreach ( $array as $key => &$value ) {
@@ -21,21 +21,20 @@ if (!function_exists('ddt_recursive_esc_js')) {
 //echo mt_shortner_root;
 global $wpdb;
 $wpdb_prefix = $wpdb->prefix;
-$wpdb_tablename = $wpdb_prefix.'mt_utmadfox';
+$wpdb_tablename = $wpdb_prefix.'adfox_utm';
 $result = $wpdb->get_results(sprintf('SELECT * FROM '. $wpdb_tablename));
 
-wp_register_script( 'mt-handle-utmscript', '' );
-wp_enqueue_script( 'mt-handle-utmscript' );
-wp_add_inline_script( 'mt-handle-utmscript',
-                      'var mt_root = "https://' . esc_js($_SERVER['HTTP_HOST']) .'/";
-                       var mt_ajax_url = "'.esc_js(mt_utmadfox_ajax_url).'";
-                       var mt_urls = '.json_encode(ddt_recursive_esc_js($result)).';'
+wp_register_script( 'adfox-utmscript', '' );
+wp_enqueue_script( 'adfox-utmscript' );
+wp_add_inline_script( 'adfox-utmscript',
+                      'var adfox_root = "https://' . esc_js($_SERVER['HTTP_HOST']) .'/";
+                       var adfox_ajax_url = "'.esc_js(ADFOX_AJAX).'";
+                       var adfox_urls = '.json_encode(ddt_recursive_esc_js($result)).';'
                     );
 
 
 
 ?>
-
 
 <div class="b-example-divider"></div>
 <div id="mt_app" class="d-none" ng-app="mtShortnerApp" ng-controller="myCtrl">
@@ -77,7 +76,7 @@ wp_add_inline_script( 'mt-handle-utmscript',
         <div class="d-grid gap-2 d-sm-flex justify-content-sm-center mb-5">
           <label for="staticEmail" class="col-sm-2 col-form-label">Short URL</label>
           <div class="col-sm-10">
-            <input oninput="validate(this)" ng-disabled="!source || !medium || !campaign || !link" ng-model="shorturl" type="text"  class="form-control-plaintext" id="mt_shortURL" placeholder="{{placeholder}}" value="{{placeholder}}">
+            <input oninput="adfox_validate(this)" ng-disabled="!source || !medium || !campaign || !link" ng-model="shorturl" type="text"  class="form-control-plaintext" id="mt_shortURL" placeholder="{{placeholder}}" value="{{placeholder}}">
             <small id="" class="form-text text-muted">Insert your short URL e.g. {{placeholder}}your_path</small>
           </div>
         </div>

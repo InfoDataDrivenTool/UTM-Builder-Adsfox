@@ -16,19 +16,19 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define("mt_utmadfox_root", plugin_dir_url( __FILE__ ));
-define("mt_utmadfox_root_include", plugin_dir_path(__FILE__));
-define("mt_utmadfox_ajax_url", admin_url('admin-ajax.php'));
+define("ADFOX_ROOT", plugin_dir_url( __FILE__ ));
+define("ADFOX_ROOT_INCLUDE", plugin_dir_path(__FILE__));
+define("ADFOX_AJAX", admin_url('admin-ajax.php'));
 
 
 if (  is_admin() ) {
 
-	register_activation_hook ( __FILE__, 'mt_utmadfox_on_activate' );
-
-	  function mt_utmadfox_on_activate() {
+	if (!function_exists('adfox_activate')) {
+		register_activation_hook ( __FILE__, 'adfox_activate' );
+	  function adfox_activate() {
 	  global $wpdb;
 	  $create_table_query = "
-	        CREATE TABLE IF NOT EXISTS `{$wpdb->prefix}mt_utmadfox` (
+	        CREATE TABLE IF NOT EXISTS `{$wpdb->prefix}adfox_utm` (
 	          `id` bigint(20) NOT NULL AUTO_INCREMENT,
 	          `shorturl` text NOT NULL,
 	          `longurl` text NOT NULL,
@@ -38,26 +38,28 @@ if (  is_admin() ) {
 	  require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
 	  dbDelta( $create_table_query );
 	  }
-
+	}
 		// custom css and js
-		add_action('admin_enqueue_scripts', 'adfox_css_and_js');
+	if (!function_exists('adfox_enqueue')) {
+		add_action('admin_enqueue_scripts', 'adfox_enqueue');
+		function adfox_enqueue($hook) {
 
-		function adfox_css_and_js($hook) {
-
-		    if ( 'toplevel_page_mt-utmadfox-dashboard' != $hook ) {
+		    if ( 'toplevel_page_adfox_UTM-dashboard' != $hook ) {
 		        return;
 		    }
 
-		    wp_enqueue_style('mt_boot_css', plugins_url('static/bootstrap.css',__FILE__ ));
-		    wp_enqueue_script('mt_ang_js', plugins_url('static/angular.js',__FILE__ ));
-				wp_enqueue_script('mt_main_js', plugins_url('static/main.js',__FILE__ ));
+		    wp_enqueue_style('adfox_boot', plugins_url('static/bootstrap.css',__FILE__ ));
+		    wp_enqueue_script('adfox_ang', plugins_url('static/angular.js',__FILE__ ));
+				wp_enqueue_script('adfox_main', plugins_url('static/main.js',__FILE__ ));
 		}
+	}
 
-
-
-		require plugin_dir_path(__FILE__) . 'class/menu.php';
+	if ( is_file(  plugin_dir_path(__FILE__) . 'class/menu.php') ) {
+			require plugin_dir_path(__FILE__) . 'class/menu.php';
+	};
+	if ( is_file( plugin_dir_path(__FILE__) . 'ajax/ajax.php') ) {
 		require plugin_dir_path(__FILE__) . 'ajax/ajax.php';
-
+	}
 
 }
 
@@ -67,7 +69,7 @@ if(!is_admin()){
 
 	global $wpdb;
 	$wpdb_prefix = $wpdb->prefix;
-	$wpdb_tablename = $wpdb_prefix.'mt_utmadfox';
+	$wpdb_tablename = $wpdb_prefix.'adfox_utm';
 	$result = $wpdb->get_results('SELECT longurl FROM '. $wpdb_tablename . ' WHERE shorturl="'.$mt_url.'"');
 	if(count($result) !== 0){
 		header('Location: '.$result[0]->longurl);

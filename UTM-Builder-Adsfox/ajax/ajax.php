@@ -1,18 +1,18 @@
 <?php
-if (!function_exists('mt_utmadfox_add')) {
-   function mt_utmadfox_add(){
+if (!function_exists('adfox_addUTM')) {
+   function adfox_addUTM(){
 
 
 
 if(isset( $_POST['shorturl'])){
 
-  if (!function_exists('ddt_recursive_esc_js')) {
-      function ddt_recursive_esc_js($array) {
-          echo json_encode($array);
+  if (!function_exists('adfox_esc_js')) {
+      function adfox_esc_js($array) {
+          //echo json_encode($array);
           foreach ( $array as $key => &$value ) {
               if ( is_array( $value ) ) {
 
-                  $value = ddt_recursive_esc_js($value);
+                  $value = adfox_esc_js($value);
 
               }
               else {
@@ -26,17 +26,17 @@ if(isset( $_POST['shorturl'])){
       }
   }
 
-       $shorturl = sanitize_url( $_POST['shorturl'] );
-       $longurl = sanitize_url( $_POST['longurl'] );
+       $shorturl =  esc_url_raw( $_POST['shorturl'] );
+       $longurl =  esc_url_raw( $_POST['longurl'] );
 
        global $wpdb;
-       $table_name = $wpdb->prefix . 'mt_utmadfox';
+       $table_name = $wpdb->prefix . 'adfox_utm';
        if($wpdb->insert($table_name, array('shorturl' => $shorturl, 'longurl' => $longurl))){
 
 
              //get all urls for updating table
             $wpdb_prefix = $wpdb->prefix;
-            $wpdb_tablename = $wpdb_prefix.'mt_utmadfox';
+            $wpdb_tablename = $wpdb_prefix.'adfox_utm';
             $result = $wpdb->get_results(sprintf('SELECT * FROM '. $wpdb_tablename));
             echo json_encode($result);
             exit;
@@ -50,23 +50,23 @@ if(isset( $_POST['shorturl'])){
 }
 
    }
-   add_action( 'wp_ajax_' . 'mt_utmadfox_add_activate', 'mt_utmadfox_add' );
-   add_action( 'wp_ajax_nopriv_' . 'mt_utmadfox_add_activate', 'mt_utmadfox_add' );
+   add_action( 'wp_ajax_' . 'adfox_addUTM_activate', 'adfox_addUTM' );
+   add_action( 'wp_ajax_nopriv_' . 'adfox_addUTM_activate', 'adfox_addUTM' );
 }
 
 
-if (!function_exists('mt_utmadfox_remove')) {
-   function mt_utmadfox_remove(){
+if (!function_exists('adfox_removeUTM')) {
+   function adfox_removeUTM(){
 
      if(isset( $_POST['shorturl'])){
 
-       if (!function_exists('ddt_recursive_esc_js')) {
-           function ddt_recursive_esc_js($array) {
-               echo json_encode($array);
+       if (!function_exists('adfox_esc_js')) {
+           function adfox_esc_js($array) {
+               //echo json_encode($array);
                foreach ( $array as $key => &$value ) {
                    if ( is_array( $value ) ) {
 
-                       $value = ddt_recursive_esc_js($value);
+                       $value = adfox_esc_js($value);
 
                    }
                    else {
@@ -82,16 +82,16 @@ if (!function_exists('mt_utmadfox_remove')) {
 
 
 
-         $shorturl = sanitize_url( $_POST['shorturl'] );
+         $shorturl =  esc_url_raw( $_POST['shorturl'] );
           global $wpdb;
           $wpdb_prefix = $wpdb->prefix;
-          $wpdb_tablename = $wpdb_prefix.'mt_utmadfox';
+          $wpdb_tablename = $wpdb_prefix.'adfox_utm';
           //delete table by short url
           $result = $wpdb->delete( $wpdb_tablename, array( 'shorturl' => $shorturl ));
           if($result == 1){
               //get all urls for updating table
              $wpdb_prefix = $wpdb->prefix;
-             $wpdb_tablename = $wpdb_prefix.'mt_utmadfox';
+             $wpdb_tablename = $wpdb_prefix.'adfox_utm';
              $result = $wpdb->get_results(sprintf('SELECT * FROM '. $wpdb_tablename));
              echo json_encode($result);
              exit;
@@ -100,6 +100,6 @@ if (!function_exists('mt_utmadfox_remove')) {
 
 
    }
-   add_action( 'wp_ajax_' . 'mt_utmadfox_remove_activate', 'mt_utmadfox_remove' );
-   add_action( 'wp_ajax_nopriv_' . 'mt_utmadfox_remove_activate', 'mt_utmadfox_remove' );
+   add_action( 'wp_ajax_' . 'adfox_removeUTM_activate', 'adfox_removeUTM' );
+   add_action( 'wp_ajax_nopriv_' . 'adfox_removeUTM_activate', 'adfox_removeUTM' );
 }

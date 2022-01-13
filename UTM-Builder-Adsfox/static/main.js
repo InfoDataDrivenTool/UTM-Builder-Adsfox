@@ -1,15 +1,15 @@
-var app = angular.module('mtShortnerApp', []);
+var adfox_app = angular.module('mtShortnerApp', []);
 angular.element(document).ready(function () {
       document.querySelector("#mt_app").classList.remove("d-none");
 });
-app.controller('myCtrl', function($scope) {
+adfox_app.controller('myCtrl', function($scope) {
   $scope.table = "Your previeously created Links"
   $scope.toolname = "URL Shortner";
   $scope.description = "Enter your URL to short it";
   $scope.generateButton = "Generate";
   $scope.longURL = "";
-  $scope.placeholder = mt_root;
-  $scope.link = mt_root;
+  $scope.placeholder = adfox_root;
+  $scope.link = adfox_root;
   $scope.source = "";
   $scope.medium = "";
   $scope.campaign = "";
@@ -18,7 +18,7 @@ app.controller('myCtrl', function($scope) {
   $scope.showError = false;
 
   $scope.errorMsg = "Short URL allready exist";
-  $scope.data = mt_urls;
+  $scope.data = adfox_urls;
   $scope.$watch('data', function() {
         // alert('hey, myVar has changed!');
      });
@@ -40,9 +40,9 @@ app.controller('myCtrl', function($scope) {
 
             }
           };
-          xhttp.open("POST", mt_ajax_url, true);
+          xhttp.open("POST", adfox_ajax_url, true);
           xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-          xhttp.send('action=mt_utmadfox_remove_activate&shorturl='+url);
+          xhttp.send('action=adfox_removeUTM_activate&shorturl='+url);
       //$scope.data = [];
       //console.log(e.remove());
       }
@@ -103,18 +103,18 @@ app.controller('myCtrl', function($scope) {
 
                 }
               };
-              xhttp.open("POST", mt_ajax_url, true);
+              xhttp.open("POST", adfox_ajax_url, true);
               xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-              xhttp.send('action=mt_utmadfox_add_activate&shorturl='+shorturl+'&longurl='+encodeURIComponent(longurl));
+              xhttp.send('action=adfox_addUTM_activate&shorturl='+shorturl+'&longurl='+encodeURIComponent(longurl));
   }
 });
 
-function validate(input){
+function adfox_validate(input){
   if(/^\s/.test(input.value))
     input.value = '';
 }
 
-function generateUID() {
+function adfox_generateUID() {
     // I generate the UID from two parts here
     // to ensure the random number provide enough bits.
     var firstPart = (Math.random() * 46656) | 0;
