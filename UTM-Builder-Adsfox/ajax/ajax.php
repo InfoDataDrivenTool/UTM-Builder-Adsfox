@@ -26,8 +26,8 @@ if(isset( $_POST['shorturl'])){
       }
   }
 
-       $shorturl =  esc_url_raw( $_POST['shorturl'] );
-       $longurl =  esc_url_raw( $_POST['longurl'] );
+       $shorturl =  sanitize_url( $_POST['shorturl'] );
+       $longurl =  sanitize_url( $_POST['longurl'] );
 
        global $wpdb;
        $table_name = $wpdb->prefix . 'adfox_utm';
@@ -82,7 +82,7 @@ if (!function_exists('adfox_removeUTM')) {
 
 
 
-         $shorturl =  esc_url_raw( $_POST['shorturl'] );
+         $shorturl =  sanitize_url( $_POST['shorturl'] );
           global $wpdb;
           $wpdb_prefix = $wpdb->prefix;
           $wpdb_tablename = $wpdb_prefix.'adfox_utm';
